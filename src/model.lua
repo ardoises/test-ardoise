@@ -123,7 +123,6 @@ return function (Layer, example, ref)
     local Copas    = require "copas"
     local Et       = require "etlua"
     local name     = assert (parameters.name  )
-    print ("name", name)
     local editor   = assert (parameters.editor)
     local layer    = assert (parameters.what  ).layer
     local target   = assert (parameters.target)
@@ -194,7 +193,7 @@ return function (Layer, example, ref)
     local g   = svg
       :append "g"
       :attr   ("class", ".ardoises-gui")
-      :attr   ("transform", "translate(" .. tostring (width/2) .. "," .. tostring (height/2) .. ")")
+      -- :attr   ("transform", "translate(" .. tostring (width/2) .. "," .. tostring (height/2) .. ")")
     local simulation = D3
       :forceSimulation ()
       :force ("link"  , D3:forceLink ():id (function (_, d) return d.id end))
@@ -218,7 +217,7 @@ return function (Layer, example, ref)
             y = <%- y %>,
           }
         ]], {
-          key = hidden [vertex].key,
+          key = tostring (hidden [vertex].proxy),
           x   = D3.event.x,
           y   = D3.event.y,
         })
@@ -231,7 +230,7 @@ return function (Layer, example, ref)
               y = <%- y %>,
             }
           ]], {
-            key = hidden [vertex].key,
+            key = tostring (hidden [vertex].proxy),
             x   = D3.event.x,
             y   = D3.event.y,
           })
