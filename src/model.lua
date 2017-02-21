@@ -211,10 +211,13 @@ return function (Layer, example, ref)
       local Json = require "cjson"
       print (Json.encode {
         [name] = Et.render ([[
-          layer.vertices [<%- key %>] [position] = {
-            x = <%- x %>,
-            y = <%- y %>,
-          }
+          return function (Layer, layer, ref)
+            local position = Layer.loaded ["position"]
+            layer.vertices [<%- key %>] [position] = {
+              x = <%- x %>,
+              y = <%- y %>,
+            }
+          end
         ]], {
           key = type (hidden [vertex].key) == "string"
             and string.format ("%q", hidden [vertex].key)
@@ -226,10 +229,13 @@ return function (Layer, example, ref)
       Copas.addthread (function ()
         print (editor:patch {
           [name] = Et.render ([[
-            layer.vertices [<%- key %>] [position] = {
-              x = <%- x %>,
-              y = <%- y %>,
-            }
+            return function (Layer, layer, ref)
+              local position = Layer.loaded ["position"]
+                layer.vertices [<%- key %>] [position] = {
+                  x = <%- x %>,
+                  y = <%- y %>,
+                }
+            end
           ]], {
             key = type (hidden [vertex].key) == "string"
               and string.format ("%q", hidden [vertex].key)
