@@ -202,10 +202,10 @@ return function (Layer, example, ref)
       :enter  ()
       :append (function (_, data)
          local proxy = hidden [data].proxy
-         return proxy [meta] [gui].create (Adapter, {
+         return proxy [meta] [gui].create {
            proxy = hidden [data],
            data  = data,
-         })
+         }
        end)
       :call (D3:drag ():on ("start", drag_start):on ("drag" , drag_drag))
     local source_x = function (_, d) return d.source.x end
@@ -219,11 +219,11 @@ return function (Layer, example, ref)
            :attr ("y2", target_y)
       nodes:each (function (element, data)
         local proxy = hidden [data].proxy
-        return proxy [meta] [gui].update (Adapter, {
+        return proxy [meta] [gui].update {
           element = element,
           proxy   = hidden [data],
           data    = data,
-        })
+        }
       end)
     end
     simulation:nodes (vertices):on ("tick", tick)
