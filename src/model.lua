@@ -231,6 +231,11 @@ return function (Layer, example, ref)
     svg:call (D3:zoom ():on ("zoom", function ()
       g:attr ("transform", D3.event.transform)
     end))
+    coroutine.yield ()
+    simulation:stop ()
+    vertices.length  = 0
+    edges   .length  = 0
+    target.innerHTML = [[]]
   end
 
   graph [meta].vertex_type [meta] [gui] = {}
