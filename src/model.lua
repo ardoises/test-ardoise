@@ -123,6 +123,7 @@ return function (Layer, example, ref)
     local Copas    = require "copas"
     local Et       = require "etlua"
     local name     = assert (parameters.name  )
+    print ("name", name)
     local editor   = assert (parameters.editor)
     local layer    = assert (parameters.what  ).layer
     local target   = assert (parameters.target)
@@ -257,7 +258,7 @@ return function (Layer, example, ref)
            data  = data,
          }
        end)
-      :call (D3:drag ():on ("start", drag_start):on ("drag" , drag_drag):on ("end" , drag_stop))
+      :call (D3:drag ():on ("start", drag_start):on ("drag", drag_drag):on ("end", drag_stop))
     local source_x = function (_, d) return d.source.x end
     local source_y = function (_, d) return d.source.y end
     local target_x = function (_, d) return d.target.x end
