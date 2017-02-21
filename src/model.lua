@@ -35,7 +35,8 @@ return function (Layer, example, ref)
   graph [meta].vertex_type = {
     [refines] = {
       record,
-    }
+    },
+    [meta] = {},
   }
 
   -- Arrows are records with only one predefined field: `vertex`.
@@ -115,8 +116,8 @@ return function (Layer, example, ref)
   graph [meta].vertex_type [meta] [gui] = {}
 
   graph [meta].vertex_type [meta] [gui].create = function (Adapter, t)
-    local group     = Adapter.document:createElementNS (Adapter.d3.namespaces.svg, "g")
-    local selection = Adapter.d3:select (group)
+    local group     = Adapter.document:createElementNS (Adapter.window.d3.namespaces.svg, "g")
+    local selection = Adapter.window.d3:select (group)
     selection
       :append "circle"
       :attr ("r", 50)
@@ -126,7 +127,7 @@ return function (Layer, example, ref)
   end
 
   graph [meta].vertex_type [meta] [gui].update = function (Adapter, t)
-    Adapter.d3
+    Adapter.window.d3
       :select (t.element)
       :selectAll "circle"
       :attr ("cx", t.data.x)
@@ -136,8 +137,8 @@ return function (Layer, example, ref)
   graph [meta].edge_type [meta] [gui] = {}
 
   graph [meta].edge_type [meta] [gui].create = function (Adapter, t)
-    local group     = Adapter.document:createElementNS (Adapter.d3.namespaces.svg, "g")
-    local selection = Adapter.d3:select (group)
+    local group     = Adapter.document:createElementNS (Adapter.window.d3.namespaces.svg, "g")
+    local selection = Adapter.window.d3:select (group)
     selection
       :append "circle"
       :attr ("r", 1)
@@ -146,7 +147,7 @@ return function (Layer, example, ref)
   end
 
   graph [meta].edge_type [meta] [gui].update = function (Adapter, t)
-    Adapter.d3
+    Adapter.window.d3
       :select (t.element)
       :selectAll "circle"
       :attr ("cx", t.data.x)
