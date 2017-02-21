@@ -23,6 +23,8 @@ return function (Layer, example, ref)
 
   local gui = Layer.new { name = "gui" }
 
+  local position = Layer.new { name = "position" }
+
   local graph = Layer.new { name = "graph" }
 
   graph [refines] = {
@@ -108,25 +110,40 @@ return function (Layer, example, ref)
     },
   }
 
+  graph [meta].vertex_type [meta] [position] = {
+    x = 0,
+    y = 0,
+  }
+
   graph [meta] [gui] = {}
 
   graph [meta] [gui].render = function (parameters)
     assert (type (parameters) == "table")
     local Adapter  = require "ardoises.js"
     local Et       = require "etlua"
+    local name     = assert (parameters.name  )
+    local editor   = assert (parameters.editor)
     local layer    = assert (parameters.what  ).layer
     local target   = assert (parameters.target)
     local D3       = Adapter.window.d3
-    local width    = 960
-    local height   = 500
+    local width    = assert (parameters.width )
+    local height   = assert (parameters.height)
     local hidden   = {}
     local vertices = Adapter.js.new (Adapter.window.Array)
     local edges    = Adapter.js.new (Adapter.window.Array)
     for key, vertex in pairs (layer.vertices) do
       local data = Adapter.tojs {
         id = vertices.length,
-        x  = width  / 2,
-        y  = height / 2,
+        x  = vertex [position]
+         and vertex [position].x
+          or 0,
+        y  = vertex [position]
+         and vertex [position].y
+          or 0,
+        fx = vertex [position]
+         and vertex [position].x,
+        fy = vertex [position]
+         and vertex [position].y,
       }
       hidden [data] = {
         id    = vertices.length,
@@ -138,8 +155,8 @@ return function (Layer, example, ref)
     for key, edge in pairs (layer.edges) do
       local data = Adapter.tojs {
         id = vertices.length,
-        x  = width  / 2,
-        y  = height / 2,
+        x  = 0,
+        y  = 0,
       }
       hidden [data] = {
         id    = vertices.length,
@@ -165,7 +182,7 @@ return function (Layer, example, ref)
       end
     end
     target.innerHTML = Et.render ([[
-      <svg width="960" height="500" id="layer">
+      <svg width="<%- width %>" height="<%- height %>" id="layer">
       </svg>
     ]], {
       width  = width,
@@ -175,6 +192,7 @@ return function (Layer, example, ref)
     local g   = svg
       :append "g"
       :attr   ("class", ".ardoises-gui")
+      :attr   ("transform", "translate(" .. tostring (width/2) .. "," .. tostring (height/2) .. ")")
     local simulation = D3
       :forceSimulation ()
       :force ("link"  , D3:forceLink ():id (function (_, d) return d.id end))
@@ -186,6 +204,22 @@ return function (Layer, example, ref)
       vertex.fy = vertex.y
     end
     local drag_drag = function (_, vertex)
+      vertex.fx = D3.event.x
+      vertex.fy = D3.event.y
+    end
+    local drag_stop = function (_, vertex)
+      editor:patch {
+        name = Et.render ([[
+          <%- key %> [position] = {
+            x = <%- x %>,
+            y = <%- y %>,
+          }
+        ]], {
+          key = hidden [vertex].key,
+          x   = D3.event.x,
+          y   = D3.event.y,
+        })
+      }
       vertex.fx = D3.event.x
       vertex.fy = D3.event.y
     end
@@ -207,7 +241,7 @@ return function (Layer, example, ref)
            data  = data,
          }
        end)
-      :call (D3:drag ():on ("start", drag_start):on ("drag" , drag_drag))
+      :call (D3:drag ():on ("start", drag_start):on ("drag" , drag_drag):on ("end" , drag_stop))
     local source_x = function (_, d) return d.source.x end
     local source_y = function (_, d) return d.source.y end
     local target_x = function (_, d) return d.target.x end
