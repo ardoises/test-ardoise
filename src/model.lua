@@ -120,6 +120,7 @@ return function (Layer, example, ref)
   graph [meta] [gui].render = function (parameters)
     assert (type (parameters) == "table")
     local Adapter  = require "ardoises.js"
+    local Copas    = require "copas"
     local Et       = require "etlua"
     local name     = assert (parameters.name  )
     local editor   = assert (parameters.editor)
@@ -208,8 +209,9 @@ return function (Layer, example, ref)
       vertex.fy = D3.event.y
     end
     local drag_stop = function (_, vertex)
-      editor:patch {
-        name = Et.render ([[
+      local Json = require "cjson"
+      print (Json.encode {
+        [name] = Et.render ([[
           <%- key %> [position] = {
             x = <%- x %>,
             y = <%- y %>,
@@ -219,7 +221,21 @@ return function (Layer, example, ref)
           x   = D3.event.x,
           y   = D3.event.y,
         })
-      }
+      })
+      Copas.addthread (function ()
+        editor:patch {
+          [name] = Et.render ([[
+            <%- key %> [position] = {
+              x = <%- x %>,
+              y = <%- y %>,
+            }
+          ]], {
+            key = hidden [vertex].key,
+            x   = D3.event.x,
+            y   = D3.event.y,
+          })
+        }
+      end)
       vertex.fx = D3.event.x
       vertex.fy = D3.event.y
     end
