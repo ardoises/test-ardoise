@@ -21,6 +21,8 @@ return function (Layer, example, ref)
     Layer.reference (collection) [meta] [collection].value_type,
   }
 
+  local gui = Layer.new { name = "gui" }
+
   local graph = Layer.new { name = "graph" }
 
   graph [refines] = {
@@ -104,6 +106,52 @@ return function (Layer, example, ref)
       },
     },
   }
+
+  graph [meta] [gui] = {}
+
+  graph [meta] [gui].create = function (Adapter, proxy)
+  end
+
+  graph [meta].vertex_type [meta] [gui] = {}
+
+  graph [meta].vertex_type [meta] [gui].create = function (Adapter, t)
+    local group     = Adapter.document:createElementNS (Adapter.d3.namespaces.svg, "g")
+    local selection = Adapter.d3:select (group)
+    selection
+      :append "circle"
+      :attr ("r", 50)
+      :attr ("stroke", "white")
+      :attr ("stroke-width", 3)
+    return selection:node ()
+  end
+
+  graph [meta].vertex_type [meta] [gui].update = function (Adapter, t)
+    Adapter.d3
+      :select (t.element)
+      :selectAll "circle"
+      :attr ("cx", t.data.x)
+      :attr ("cy", t.data.y)
+  end
+
+  graph [meta].edge_type [meta] [gui] = {}
+
+  graph [meta].edge_type [meta] [gui].create = function (Adapter, t)
+    local group     = Adapter.document:createElementNS (Adapter.d3.namespaces.svg, "g")
+    local selection = Adapter.d3:select (group)
+    selection
+      :append "circle"
+      :attr ("r", 1)
+      :attr ("stroke", "white")
+    return selection:node ()
+  end
+
+  graph [meta].edge_type [meta] [gui].update = function (Adapter, t)
+    Adapter.d3
+      :select (t.element)
+      :selectAll "circle"
+      :attr ("cx", t.data.x)
+      :attr ("cy", t.data.y)
+  end
 
   local binary_edges = Layer.new { name = "graph.binary_edges" }
 
