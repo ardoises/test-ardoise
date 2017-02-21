@@ -193,7 +193,6 @@ return function (Layer, example, ref)
     local g   = svg
       :append "g"
       :attr   ("class", ".ardoises-gui")
-      -- :attr   ("transform", "translate(" .. tostring (width/2) .. "," .. tostring (height/2) .. ")")
     local simulation = D3
       :forceSimulation ()
       :force ("link"  , D3:forceLink ():id (function (_, d) return d.id end))
@@ -212,29 +211,33 @@ return function (Layer, example, ref)
       local Json = require "cjson"
       print (Json.encode {
         [name] = Et.render ([[
-          <%- key %> [position] = {
+          layer.vertices [<%- key %>] [position] = {
             x = <%- x %>,
             y = <%- y %>,
           }
         ]], {
-          key = tostring (hidden [vertex].proxy),
+          key = type (hidden [vertex].key) == "string"
+            and string.format ("%q", hidden [vertex].key)
+             or hidden [vertex].key,
           x   = D3.event.x,
           y   = D3.event.y,
         })
       })
       Copas.addthread (function ()
-        editor:patch {
+        print (editor:patch {
           [name] = Et.render ([[
-            <%- key %> [position] = {
+            layer.vertices [<%- key %>] [position] = {
               x = <%- x %>,
               y = <%- y %>,
             }
           ]], {
-            key = tostring (hidden [vertex].proxy),
+            key = type (hidden [vertex].key) == "string"
+              and string.format ("%q", hidden [vertex].key)
+               or hidden [vertex].key,
             x   = D3.event.x,
             y   = D3.event.y,
           })
-        }
+        })
       end)
       vertex.fx = D3.event.x
       vertex.fy = D3.event.y
