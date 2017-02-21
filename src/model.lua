@@ -208,41 +208,14 @@ return function (Layer, example, ref)
       vertex.fy = D3.event.y
     end
     local drag_stop = function (_, vertex)
-      local Json = require "cjson"
-      print (Json.encode {
-        [name] = Et.render ([[
-          return function (Layer, layer, ref)
-            local position = Layer.loaded ["position"]
-            layer.vertices [<%- key %>] [position] = {
-              x = <%- x %>,
-              y = <%- y %>,
-            }
-          end
-        ]], {
-          key = type (hidden [vertex].key) == "string"
-            and string.format ("%q", hidden [vertex].key)
-             or hidden [vertex].key,
-          x   = D3.event.x,
-          y   = D3.event.y,
-        })
-      })
       Copas.addthread (function ()
         print (editor:patch {
-          [name] = Et.render ([[
-            return function (Layer, layer, ref)
-              local position = Layer.loaded ["position"]
-                layer.vertices [<%- key %>] [position] = {
-                  x = <%- x %>,
-                  y = <%- y %>,
-                }
-            end
-          ]], {
-            key = type (hidden [vertex].key) == "string"
-              and string.format ("%q", hidden [vertex].key)
-               or hidden [vertex].key,
-            x   = D3.event.x,
-            y   = D3.event.y,
-          })
+          [name] = function ()
+            hidden [vertex].proxy [position] = {
+                x = D3.event.x,
+                y = D3.event.y,
+              }
+          end,
         })
       end)
       vertex.fx = D3.event.x
