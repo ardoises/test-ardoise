@@ -21,10 +21,6 @@ return function (Layer, example, ref)
     Layer.reference (collection) [meta] [collection].value_type,
   }
 
-  local gui = Layer.new { name = "gui" }
-
-  local position = Layer.new { name = "position" }
-
   local graph = Layer.new { name = "graph" }
 
   graph [refines] = {
@@ -110,14 +106,14 @@ return function (Layer, example, ref)
     },
   }
 
-  graph [meta].vertex_type [meta] [position] = {
+  graph [meta].vertex_type [meta].position = {
     x = 0,
     y = 0,
   }
 
-  graph [meta] [gui] = {}
+  graph [meta].gui = {}
 
-  graph [meta] [gui].render = function (parameters)
+  graph [meta].gui.render = function (parameters)
     assert (type (parameters) == "table")
     local Adapter  = require "ardoises.js"
     local Copas    = require "copas"
@@ -135,16 +131,16 @@ return function (Layer, example, ref)
     for key, vertex in pairs (layer.vertices) do
       local data = Adapter.tojs {
         id = vertices.length,
-        x  = vertex [position]
-         and vertex [position].x
+        x  = vertex.position
+         and vertex.position.x
           or 0,
-        y  = vertex [position]
-         and vertex [position].y
+        y  = vertex.position
+         and vertex.position.y
           or 0,
-        fx = vertex [position]
-         and vertex [position].x,
-        fy = vertex [position]
-         and vertex [position].y,
+        fx = vertex.position
+         and vertex.position.x,
+        fy = vertex.position
+         and vertex.position.y,
       }
       hidden [data] = {
         id    = vertices.length,
@@ -211,7 +207,7 @@ return function (Layer, example, ref)
       Copas.addthread (function ()
         print (editor:patch {
           [name] = function ()
-            hidden [vertex].proxy [position] = {
+            hidden [vertex].proxy.position = {
                 x = D3.event.x,
                 y = D3.event.y,
               }
@@ -234,7 +230,7 @@ return function (Layer, example, ref)
       :enter  ()
       :append (function (_, data)
          local proxy = hidden [data].proxy
-         return proxy [meta] [gui].create {
+         return proxy [meta].gui.create {
            proxy = hidden [data],
            data  = data,
          }
@@ -251,7 +247,7 @@ return function (Layer, example, ref)
            :attr ("y2", target_y)
       nodes:each (function (element, data)
         local proxy = hidden [data].proxy
-        return proxy [meta] [gui].update {
+        return proxy [meta].gui.update {
           element = element,
           proxy   = hidden [data],
           data    = data,
@@ -270,9 +266,9 @@ return function (Layer, example, ref)
     target.innerHTML = [[]]
   end
 
-  graph [meta].vertex_type [meta] [gui] = {}
+  graph [meta].vertex_type [meta].gui = {}
 
-  graph [meta].vertex_type [meta] [gui].create = function (parameters)
+  graph [meta].vertex_type [meta].gui.create = function (parameters)
     local Adapter   = require "ardoises.js"
     local group     = Adapter.document:createElementNS (Adapter.window.d3.namespaces.svg, "g")
     local selection = Adapter.window.d3:select (group)
@@ -284,7 +280,7 @@ return function (Layer, example, ref)
     return selection:node ()
   end
 
-  graph [meta].vertex_type [meta] [gui].update = function (parameters)
+  graph [meta].vertex_type [meta].gui.update = function (parameters)
     local Adapter = require "ardoises.js"
     Adapter.window.d3
       :select (parameters.element)
@@ -293,9 +289,9 @@ return function (Layer, example, ref)
       :attr ("cy", parameters.data.y)
   end
 
-  graph [meta].edge_type [meta] [gui] = {}
+  graph [meta].edge_type [meta].gui = {}
 
-  graph [meta].edge_type [meta] [gui].create = function (parameters)
+  graph [meta].edge_type [meta].gui.create = function (parameters)
     local Adapter   = require "ardoises.js"
     local group     = Adapter.document:createElementNS (Adapter.window.d3.namespaces.svg, "g")
     local selection = Adapter.window.d3:select (group)
@@ -306,7 +302,7 @@ return function (Layer, example, ref)
     return selection:node ()
   end
 
-  graph [meta].edge_type [meta] [gui].update = function (parameters)
+  graph [meta].edge_type [meta].gui.update = function (parameters)
     local Adapter = require "ardoises.js"
     Adapter.window.d3
       :select (parameters.element)
