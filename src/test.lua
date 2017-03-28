@@ -4,6 +4,7 @@ return function (Layer, layer, ref)
     b = 1,
     c = 1,
     d = 1,
+    e = 1,
   }
   layer.x = {
     a = 1,
