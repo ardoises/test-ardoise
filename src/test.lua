@@ -3,6 +3,7 @@ return function (Layer, layer, ref)
     a = 1,
     b = 1,
     c = 1,
+    d = 1,
   }
   layer.x = {
     a = 1,
