@@ -1,5 +1,6 @@
 return function (Layer, layer, ref)
   layer.a = {
+    a = 1,
     b = 1,
     c = 1,
   }
