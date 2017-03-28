@@ -1,11 +1,9 @@
 return function (Layer, layer, ref)
   local refines = Layer.key.refines
   layer [refines] = {
-    [1] = Layer.require "petrinet",
   }
   layer.places = {
     a = {
-
     },
   }
   layer.pre_arcs = {
@@ -16,7 +14,6 @@ return function (Layer, layer, ref)
   }
   layer.transitions = {
     b = {
-
     },
   }
 end
