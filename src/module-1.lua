@@ -1,1 +1,2 @@
-return function () end
+return function (Layer, layer, ref)
+end
