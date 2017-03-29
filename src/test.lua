@@ -6,6 +6,9 @@ return function (Layer, layer, ref)
     d = 1,
     e = 1,
   }
+  layer.didier = {
+    chef = true,
+  }
   layer.x = {
     a = 1,
     b = 2,
