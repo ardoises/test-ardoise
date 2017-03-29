@@ -1,1 +1,3 @@
-return function (Layer, layer, ref) end
+return function (Layer, layer, ref)
+  layer.x = 1
+end
