@@ -1,5 +1,5 @@
 return function (Layer, layer, ref)
-  layer.dimitri = "koala"
+  layer.dimitri = "i loooooove this user interface!"
   layer.x = true
   layer.y = false
 end
