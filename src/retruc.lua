@@ -1,3 +1,3 @@
 return function (Layer, layer, ref)
-  layer.x = true
+  layer.x = false
 end
