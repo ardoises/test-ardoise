@@ -13,4 +13,5 @@ return function (Layer, layer, ref)
   layer.foo = deleted
   layer.tropfort = true
   layer.truc = "truc"
+  layer.x = 3
 end
