@@ -1,5 +1,6 @@
 return function (Layer, layer, ref)
-  layer.foo = "bar"
+  local deleted = Layer.key.deleted
+  layer.foo = deleted
   layer.tropfort = true
   layer.truc = "truc"
 end
