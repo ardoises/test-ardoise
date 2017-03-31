@@ -1,15 +1,15 @@
 return function (Layer, layer, ref)
   local deleted = Layer.key.deleted
-  layer [10] = 10
+  layer [10] = 100
   layer [1] = 1
-  layer [2] = 2
-  layer [3] = 3
-  layer [4] = 4
-  layer [5] = 5
-  layer [6] = 6
-  layer [7] = 7
-  layer [8] = 8
-  layer [9] = 9
+  layer [2] = 4
+  layer [3] = 9
+  layer [4] = 16
+  layer [5] = 25
+  layer [6] = 36
+  layer [7] = 49
+  layer [8] = 64
+  layer [9] = 81
   layer.foo = deleted
   layer.tropfort = true
   layer.truc = "truc"
