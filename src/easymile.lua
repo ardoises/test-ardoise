@@ -12,6 +12,7 @@ return function (Layer, layer, ref)
   layer [9] = 81
   layer.a = "b"
   layer.foo = deleted
+  layer.test = true
   layer.tropfort = true
   layer.truc = "truc"
   layer.x = true
