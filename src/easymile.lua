@@ -14,6 +14,6 @@ return function (Layer, layer, ref)
   layer.foo = deleted
   layer.test = true
   layer.tropfort = true
-  layer.truc = "truc"
+  layer.truc = "muche"
   layer.x = deleted
 end
