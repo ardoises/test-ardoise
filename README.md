@@ -1,2 +1,3 @@
-# test-ardoise
-Ardoise used for testing only
+# Testing repository for Ardoises
+
+This repository contains some [Ardoises](https://ardoises.ovh) layers used for **testing only**!
